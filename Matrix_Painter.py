@@ -332,16 +332,18 @@ class MatrixPainter:
             ("Fire", self.effect_fire),
             ("Matrix Rain", self.effect_matrix_rain),
             ("Sparkles", self.effect_sparkles),
-            ("Color Morph", self.effect_color_morph)
+            ("Color Morph", self.effect_color_morph),
+            ("Corner Rainbow", self.effect_corner_rainbow)
         ]
         
         for i, (name, func) in enumerate(effects):
-            row, col = divmod(i, 2)
+            row, col = divmod(i, 3)
             ttk.Button(realtime_frame, text=name, 
                       command=func).grid(row=row, column=col, padx=5, pady=2, sticky='ew')
         
         realtime_frame.columnconfigure(0, weight=1)
         realtime_frame.columnconfigure(1, weight=1)
+        realtime_frame.columnconfigure(2, weight=1)
         
         # Effect parameters
         params_frame = ttk.LabelFrame(effects_frame, text="Effect Parameters", padding=10)
@@ -1217,6 +1219,77 @@ class MatrixPainter:
         
         delay = max(10, int(1000 / self.effect_speed.get()))
         self.root.after(delay, self.color_morph_step)
+
+    def effect_corner_rainbow(self):
+        self.animation_running = True
+        self.status_lbl.config(text='Corner Rainbow effect running')
+        self.animation_time = 0
+        self.corner_effect_current_corner = 0
+        self.corner_effect_fade_level = 255
+        self.corner_effect_fading_out = False
+        self.corner_effect_last_switch_time = time.time()
+        self.corner_rainbow_step()
+
+    def corner_rainbow_step(self):
+        if not self.animation_running:
+            return
+
+        self.animation_time += 1
+        t = self.animation_time * self.effect_speed.get() * 0.2
+
+        # Pulsing brightness (breathing effect)
+        # beatsin8(6, 180, 255) -> 6 BPM sine wave between 180 and 255
+        bpm = 6
+        min_bright = 180
+        max_bright = 255
+        beat = (math.sin(time.time() * (bpm / 60.0) * 2 * math.pi) + 1) / 2
+        pulse = min_bright + beat * (max_bright - min_bright)
+
+        # Manage fading/switching
+        if not self.corner_effect_fading_out and (time.time() - self.corner_effect_last_switch_time > random.uniform(3, 5)):
+            self.corner_effect_fading_out = True
+
+        if self.corner_effect_fading_out:
+            if self.corner_effect_fade_level > 10:
+                self.corner_effect_fade_level -= 10
+            else:
+                self.corner_effect_fade_level = 0
+                self.corner_effect_current_corner = random.randint(0, 3)
+                self.corner_effect_fading_out = False
+        else:
+            if self.corner_effect_fade_level < 245:
+                self.corner_effect_fade_level += 10
+            else:
+                self.corner_effect_fade_level = 255
+                self.corner_effect_last_switch_time = time.time()
+
+        # Draw rainbow from currentCorner
+        for y in range(ROWS):
+            for x in range(COLS):
+                diag = 0
+                if self.corner_effect_current_corner == 0: # Top-Left
+                    diag = x + y
+                elif self.corner_effect_current_corner == 1: # Top-Right
+                    diag = (COLS - 1 - x) + y
+                elif self.corner_effect_current_corner == 2: # Bottom-Left
+                    diag = x + (ROWS - 1 - y)
+                elif self.corner_effect_current_corner == 3: # Bottom-Right
+                    diag = (COLS - 1 - x) + (ROWS - 1 - y)
+
+                hue = ((diag * 12) + t) / 255.0
+                hue = hue - math.floor(hue) # equivalent of & 0xFF
+
+                # Combine fadeLevel and pulse
+                brightness = (pulse / 255.0) * (self.corner_effect_fade_level / 255.0)
+                
+                r, g, b = colorsys.hsv_to_rgb(hue, 1.0, brightness)
+                color = (int(r * 255), int(g * 255), int(b * 255))
+                self.draw_square(x, y, color, self.show_on_screen.get())
+
+        self.send_to_matrix()
+        
+        delay = 30 # ms, for ~33 FPS
+        self.root.after(delay, self.corner_rainbow_step)
         
     # ====================== FILE OPERATIONS ======================
     def load_image(self):
