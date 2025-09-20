@@ -92,14 +92,17 @@ const App: React.FC = () => {
     }, [grid, sendFrame, updateCurrentFrame]);
 
     const handleCellInteraction = useCallback((x: number, y: number) => {
-        if (isAnimationRunning) setAnimationId(Animation.None);
+        // Only stop animation if it's not a custom animation being edited with Pencil/Fill
+        if (isAnimationRunning && !(animationId === Animation.Custom && (tool === 'Pencil' || tool === 'Fill'))) {
+            setAnimationId(Animation.None);
+        }
 
         if (tool === 'Pencil') {
             handleSetPixel(x, y, color);
         } else if (tool === 'Fill') {
             handleFloodFill(x, y, color);
         }
-    }, [isAnimationRunning, tool, color, handleSetPixel, handleFloodFill]);
+    }, [isAnimationRunning, tool, color, handleSetPixel, handleFloodFill, animationId]);
     
     const handleBrightnessChange = useCallback((value: number) => {
        setBrightnessValue(value);
