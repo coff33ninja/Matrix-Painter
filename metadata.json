@@ -1,0 +1,5 @@
+{
+  "name": "Live Matrix Designer",
+  "description": "A web-based visual designer to control a 9x22 WS2812B LED matrix in real-time. Draw, fill with colors, and apply pre-made, omnidirectional animations directly from your browser using the Web Serial API.",
+  "requestFramePermissions": []
+}
