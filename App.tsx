@@ -158,15 +158,15 @@ const App: React.FC = () => {
                     <h1 className="text-3xl font-bold text-cyan-400 tracking-wider">
                         Live Matrix Designer
                     </h1>
-                    <SerialPanel
-                        onConnect={connect}
-                        onDisconnect={disconnect}
-                        isConnected={isConnected}
-                    />
                 </header>
 
                 <main className="flex flex-col lg:flex-row gap-6">
                     <div className="w-full lg:w-72 space-y-6 flex-shrink-0">
+                        <SerialPanel
+                            onConnect={connect}
+                            onDisconnect={disconnect}
+                            isConnected={isConnected}
+                        />
                         <Toolbar
                             selectedColor={color}
                             onColorChange={setColor}
