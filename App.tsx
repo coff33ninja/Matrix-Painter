@@ -6,9 +6,9 @@ import { SerialPanel } from './components/SerialPanel';
 import { TextPanel } from './components/TextPanel';
 import { useSerial } from './hooks/useSerial';
 import { useAnimationLoop } from './hooks/useAnimationLoop';
-import { generateRainbowFrame, generatePlasmaFrame } from './lib/animations';
-import { createEmptyGrid, floodFill, renderText, getTextWidth } from './lib/utils';
-import type { Grid, RGBColor, Tool, AnimationId, Direction } from './types';
+import { generateRainbowFrame, generatePlasmaFrame, getRainbowColor, getPlasmaColor } from './lib/animations';
+import { createEmptyGrid, floodFill, renderText, getTextWidth, selectConnectedPixels } from './lib/utils';
+import type { Grid, RGBColor, Tool, AnimationId, Direction, Selection } from './types';
 import { Animation } from './types';
 import { ROWS, COLS } from './constants';
 
@@ -19,6 +19,7 @@ const App: React.FC = () => {
     const [color, setColor] = useState<RGBColor>({ r: 255, g: 0, b: 255 });
     const [tool, setTool] = useState<Tool>('Pencil');
     const [isMouseDown, setIsMouseDown] = useState(false);
+    const [selection, setSelection] = useState<Selection>(new Set());
 
     const [animationId, setAnimationId] = useState<AnimationId>(Animation.None);
     const [animationSpeed, setAnimationSpeed] = useState(5);
@@ -103,8 +104,11 @@ const App: React.FC = () => {
             handleFloodFill(x, y, color);
         } else if (tool === 'Erase') {
             handleSetPixel(x, y, { r: 0, g: 0, b: 0 });
+        } else if (tool === 'Select') {
+            const newSelection = selectConnectedPixels(grid, x, y);
+            setSelection(newSelection);
         }
-    }, [isAnimationRunning, tool, color, handleSetPixel, handleFloodFill, animationId]);
+    }, [isAnimationRunning, tool, color, handleSetPixel, handleFloodFill, animationId, grid, setSelection]);
     
     const handleBrightnessChange = useCallback((value: number) => {
        setBrightnessValue(value);
@@ -114,8 +118,34 @@ const App: React.FC = () => {
         if (isAnimationRunning) setAnimationId(Animation.None);
         const newGrid = createEmptyGrid();
         updateCurrentFrame(() => newGrid);
+        setSelection(new Set());
         sendFrame(newGrid);
-    }, [isAnimationRunning, sendFrame, updateCurrentFrame]);
+    }, [isAnimationRunning, sendFrame, updateCurrentFrame, setSelection]);
+
+    const handleApplyEffectToSelection = useCallback((effect: 'rainbow' | 'plasma') => {
+        if (selection.size === 0) return;
+
+        const newGrid = animationFrames[currentFrameIndex].map(row => [...row]);
+        const time = Date.now() / 1000;
+
+        selection.forEach(coord => {
+            const [x, y] = coord.split(',').map(Number);
+            let color;
+            if (effect === 'rainbow') {
+                color = getRainbowColor(x, y, time, 'right');
+            } else if (effect === 'plasma') {
+                color = getPlasmaColor(x, y, time, 'right');
+            }
+            if (color) {
+                newGrid[y][x] = color;
+            }
+        });
+
+        updateCurrentFrame(() => newGrid);
+        sendFrame(newGrid);
+        setSelection(new Set());
+
+    }, [selection, animationFrames, currentFrameIndex, updateCurrentFrame, sendFrame, setSelection]);
 
     const handleTextSubmit = useCallback((text: string, scroll: boolean) => {
         if (scroll) {
@@ -177,6 +207,8 @@ const App: React.FC = () => {
                             onColorChange={setColor}
                             selectedTool={tool}
                             onToolChange={setTool}
+                            selection={selection}
+                            onApplyEffect={handleApplyEffectToSelection}
                             onBrightnessChange={handleBrightnessChange}
                             onClear={handleClearGrid}
                             animationId={animationId}
@@ -204,6 +236,7 @@ const App: React.FC = () => {
                     >
                         <MatrixGrid
                             grid={grid}
+                            selection={selection}
                             onCellClick={handleCellInteraction}
                             isMouseDown={isMouseDown}
                             disabled={!isConnected}

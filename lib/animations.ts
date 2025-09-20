@@ -28,43 +28,51 @@ const hsvToRgb = (h: number, s: number, v: number): RGBColor => {
     };
 };
 
+export const getRainbowColor = (x: number, y: number, time: number, direction: Direction): RGBColor => {
+    let val;
+    switch(direction) {
+        case 'up': val = y; break;
+        case 'down': val = -y; break;
+        case 'left': val = x; break;
+        case 'right': val = -x; break;
+    }
+    const hue = (time + val / 20) % 1;
+    return hsvToRgb(hue, 1, 1);
+};
+
 export const generateRainbowFrame = (time: number, direction: Direction): Grid => {
     const grid = createGrid();
     for (let y = 0; y < ROWS; y++) {
         for (let x = 0; x < COLS; x++) {
-            let val;
-            switch(direction) {
-                case 'up': val = y; break;
-                case 'down': val = -y; break;
-                case 'left': val = x; break;
-                case 'right': val = -x; break;
-            }
-            const hue = (time + val / 20) % 1;
-            grid[y][x] = hsvToRgb(hue, 1, 1);
+            grid[y][x] = getRainbowColor(x, y, time, direction);
         }
     }
     return grid;
 };
 
 
+export const getPlasmaColor = (x: number, y: number, time: number, direction: Direction): RGBColor => {
+    let dx, dy;
+    switch(direction) {
+        case 'up': dx = time; dy = 0; break;
+        case 'down': dx = -time; dy = 0; break;
+        case 'left': dx = 0; dy = time; break;
+        case 'right': dx = 0; dy = -time; break;
+    }
+
+    const v1 = Math.sin((x * 0.2) + time + dx);
+    const v2 = Math.sin((y * 0.3) + time + dy);
+    const v3 = Math.sin(((x + y) * 0.15) + time);
+
+    const value = (v1 + v2 + v3 + 3) / 6; // Normalize to 0-1
+    return hsvToRgb(value, 1, 1);
+};
+
 export const generatePlasmaFrame = (time: number, direction: Direction): Grid => {
     const grid = createGrid();
     for (let y = 0; y < ROWS; y++) {
         for (let x = 0; x < COLS; x++) {
-            let dx, dy;
-            switch(direction) {
-                case 'up': dx = time; dy = 0; break;
-                case 'down': dx = -time; dy = 0; break;
-                case 'left': dx = 0; dy = time; break;
-                case 'right': dx = 0; dy = -time; break;
-            }
-
-            const v1 = Math.sin((x * 0.2) + time + dx);
-            const v2 = Math.sin((y * 0.3) + time + dy);
-            const v3 = Math.sin(((x + y) * 0.15) + time);
-            
-            const value = (v1 + v2 + v3 + 3) / 6; // Normalize to 0-1
-            grid[y][x] = hsvToRgb(value, 1, 1);
+            grid[y][x] = getPlasmaColor(x, y, time, direction);
         }
     }
     return grid;

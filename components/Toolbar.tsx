@@ -1,19 +1,22 @@
 import React from 'react';
 import { ColorPicker } from './ColorPicker';
-import type { RGBColor, Tool, AnimationId, Direction } from '../types';
+import type { RGBColor, Tool, AnimationId, Direction, Selection } from '../types';
 import { Animation } from '../types';
 import { PencilIcon } from './icons/PencilIcon';
 import { FillIcon } from './icons/FillIcon';
 import { TextIcon } from './icons/TextIcon';
 import { PlayIcon } from './icons/PlayIcon';
 import { PauseIcon } from './icons/PauseIcon';
-import { TrashIcon } from './icons/TrashIcon';
+import { EraseIcon } from './icons/EraseIcon';
+import { SelectIcon } from './icons/SelectIcon';
 
 interface ToolbarProps {
   selectedColor: RGBColor;
   onColorChange: (color: RGBColor) => void;
   selectedTool: Tool;
   onToolChange: (tool: Tool) => void;
+  selection: Selection;
+  onApplyEffect: (effect: 'rainbow' | 'plasma') => void; // Placeholder
   onBrightnessChange: (value: number) => void;
   onClear: () => void;
   animationId: AnimationId;
@@ -31,6 +34,7 @@ interface ToolbarProps {
 export const Toolbar: React.FC<ToolbarProps> = (props) => {
     const {
         selectedColor, onColorChange, selectedTool, onToolChange,
+        selection, onApplyEffect,
         onBrightnessChange, onClear, animationId, onAnimationChange,
         isAnimationRunning, animationSpeed, onAnimationSpeedChange,
         animationDirection, onAnimationDirectionChange, customAnimationFps,
@@ -66,9 +70,25 @@ export const Toolbar: React.FC<ToolbarProps> = (props) => {
                     <ToolButton name="Pencil" icon={<PencilIcon />} selectedTool={selectedTool} onSelect={onToolChange} />
                     <ToolButton name="Fill" icon={<FillIcon />} selectedTool={selectedTool} onSelect={onToolChange} />
                     <ToolButton name="Text" icon={<TextIcon />} selectedTool={selectedTool} onSelect={onToolChange} />
-                    <ToolButton name="Erase" icon={<TrashIcon />} selectedTool={selectedTool} onSelect={onToolChange} />
+                    <ToolButton name="Erase" icon={<EraseIcon />} selectedTool={selectedTool} onSelect={onToolChange} />
+                    <ToolButton name="Select" icon={<SelectIcon />} selectedTool={selectedTool} onSelect={onToolChange} />
                 </div>
             </div>
+
+            {/* Selection Effects Section */}
+            {selection.size > 0 && (
+                <div>
+                    <h3 className="text-lg font-semibold mb-3 text-cyan-300">Selection Effects</h3>
+                    <div className="space-y-2">
+                        <button onClick={() => onApplyEffect('rainbow')} className="w-full px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg transition-colors">
+                            Rainbow Fill
+                        </button>
+                        <button onClick={() => onApplyEffect('plasma')} className="w-full px-4 py-2 bg-teal-600 hover:bg-teal-700 rounded-lg transition-colors">
+                            Plasma Fill
+                        </button>
+                    </div>
+                </div>
+            )}
 
             {/* Controls Section */}
             <div>

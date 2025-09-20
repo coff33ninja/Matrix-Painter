@@ -1,5 +1,5 @@
 import { ROWS, COLS } from '../constants';
-import type { Grid, RGBColor } from '../types';
+import type { Grid, RGBColor, Selection } from '../types';
 import { FONT } from './font';
 
 export const createEmptyGrid = (): Grid => {
@@ -81,3 +81,37 @@ export const renderText = (grid: Grid, text: string, color: RGBColor, startX: nu
 
   return newGrid;
 };
+
+export const selectConnectedPixels = (grid: Grid, startX: number, startY: number): Selection => {
+    const selection: Selection = new Set();
+    const visited: Set<string> = new Set();
+    const queue: [number, number][] = [[startX, startY]];
+
+    if (startX < 0 || startX >= COLS || startY < 0 || startY >= ROWS) {
+        return selection;
+    }
+
+    const targetColor = grid[startY][startX];
+
+    while (queue.length > 0) {
+        const [x, y] = queue.shift()!;
+        const coord = `${x},${y}`;
+
+        if (x < 0 || x >= COLS || y < 0 || y >= ROWS || visited.has(coord)) {
+            continue;
+        }
+
+        visited.add(coord);
+        const currentColor = grid[y][x];
+
+        if (currentColor.r === targetColor.r && currentColor.g === targetColor.g && currentColor.b === targetColor.b) {
+            selection.add(coord);
+            queue.push([x + 1, y]);
+            queue.push([x - 1, y]);
+            queue.push([x, y + 1]);
+            queue.push([x, y - 1]);
+        }
+    }
+
+    return selection;
+}

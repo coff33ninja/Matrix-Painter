@@ -1,10 +1,11 @@
 
 import React from 'react';
-import type { Grid, RGBColor } from '../types';
+import type { Grid, RGBColor, Selection } from '../types';
 import { COLS } from '../constants';
 
 interface MatrixGridProps {
   grid: Grid;
+  selection: Selection;
   onCellClick: (x: number, y: number) => void;
   isMouseDown: boolean;
   disabled: boolean;
@@ -12,16 +13,17 @@ interface MatrixGridProps {
 
 const Cell: React.FC<{
   color: RGBColor;
+  isSelected: boolean;
   onClick: () => void;
   onMouseEnter: () => void;
-}> = ({ color, onClick, onMouseEnter }) => {
+}> = ({ color, isSelected, onClick, onMouseEnter }) => {
   const cellColor = `rgb(${color.r}, ${color.g}, ${color.b})`;
   const shadowColor = `rgba(${color.r}, ${color.g}, ${color.b}, 0.6)`;
   const isOff = color.r === 0 && color.g === 0 && color.b === 0;
 
   return (
     <div
-      className="w-full h-full rounded-sm cursor-pointer transition-all duration-100"
+      className="w-full h-full rounded-sm cursor-pointer transition-all duration-100 relative"
       style={{
         backgroundColor: cellColor,
         boxShadow: isOff ? 'none' : `0 0 4px 1px ${shadowColor}`,
@@ -29,12 +31,16 @@ const Cell: React.FC<{
       }}
       onClick={onClick}
       onMouseEnter={onMouseEnter}
-    />
+    >
+        {isSelected && (
+            <div className="absolute inset-0 bg-white/30 rounded-sm border-2 border-cyan-400 animate-pulse"></div>
+        )}
+    </div>
   );
 };
 
 
-export const MatrixGrid: React.FC<MatrixGridProps> = ({ grid, onCellClick, isMouseDown, disabled }) => {
+export const MatrixGrid: React.FC<MatrixGridProps> = ({ grid, selection, onCellClick, isMouseDown, disabled }) => {
   const handleCellMouseEnter = (x: number, y: number) => {
     if (isMouseDown) {
       onCellClick(x, y);
@@ -52,6 +58,7 @@ export const MatrixGrid: React.FC<MatrixGridProps> = ({ grid, onCellClick, isMou
           <Cell
             key={`${x}-${y}`}
             color={color}
+            isSelected={selection.has(`${x},${y}`)}
             onClick={() => !disabled && onCellClick(x, y)}
             onMouseEnter={() => !disabled && handleCellMouseEnter(x, y)}
           />
