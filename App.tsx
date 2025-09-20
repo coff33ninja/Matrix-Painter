@@ -101,6 +101,8 @@ const App: React.FC = () => {
             handleSetPixel(x, y, color);
         } else if (tool === 'Fill') {
             handleFloodFill(x, y, color);
+        } else if (tool === 'Erase') {
+            handleSetPixel(x, y, { r: 0, g: 0, b: 0 });
         }
     }, [isAnimationRunning, tool, color, handleSetPixel, handleFloodFill, animationId]);
     

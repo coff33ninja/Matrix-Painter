@@ -7,6 +7,7 @@ import { FillIcon } from './icons/FillIcon';
 import { TextIcon } from './icons/TextIcon';
 import { PlayIcon } from './icons/PlayIcon';
 import { PauseIcon } from './icons/PauseIcon';
+import { TrashIcon } from './icons/TrashIcon';
 
 interface ToolbarProps {
   selectedColor: RGBColor;
@@ -65,6 +66,7 @@ export const Toolbar: React.FC<ToolbarProps> = (props) => {
                     <ToolButton name="Pencil" icon={<PencilIcon />} selectedTool={selectedTool} onSelect={onToolChange} />
                     <ToolButton name="Fill" icon={<FillIcon />} selectedTool={selectedTool} onSelect={onToolChange} />
                     <ToolButton name="Text" icon={<TextIcon />} selectedTool={selectedTool} onSelect={onToolChange} />
+                    <ToolButton name="Erase" icon={<TrashIcon />} selectedTool={selectedTool} onSelect={onToolChange} />
                 </div>
             </div>
 
