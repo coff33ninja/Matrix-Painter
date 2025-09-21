@@ -1,8 +1,8 @@
 
-import { useState, useCallback, useRef, useEffect } from 'react';
-import { CMD_PIXEL, CMD_FRAME, CMD_BRIGHT, SERIAL_BAUD_RATE } from '../constants';
-import type { Grid, RGBColor } from '../types';
-import { mapXYtoIndex } from '../lib/utils';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
+import { CMD_PIXEL, CMD_FRAME, CMD_BRIGHT, SERIAL_BAUD_RATE } from '../constants.js';
+import type { Grid, RGBColor } from '../types.js';
+import { mapXYtoIndex } from '../lib/utils.js';
 
 interface UseSerialReturn {
   isConnected: boolean;
