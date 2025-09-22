@@ -169,7 +169,9 @@ const App: React.FC = () => {
                 setAnimationId(Animation.None);
                 setProceduralFrame(null);
             }
-            const newGrid = renderText(createEmptyGrid(), text, FONT, color, 0);
+            const textWidth = getTextWidth(text, FONT); // Calculate text width
+            const startX = Math.floor((COLS - textWidth) / 2); // Calculate startX for centering
+            const newGrid = renderText(createEmptyGrid(), text, FONT, color, startX); // Pass startX
             setAnimationFrames(prev => prev.map((frame, index) => index === currentFrameIndex ? newGrid : frame));
             sendFrame(newGrid);
             // If the submitted text is from the clock, activate clock auto-update

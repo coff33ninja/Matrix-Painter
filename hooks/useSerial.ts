@@ -109,7 +109,7 @@ export const useSerial = (): UseSerialReturn => {
     // Fill buffer with grid data
     for (let y = 0; y < rows; y++) {
         for (let x = 0; x < cols; x++) {
-            const index = mapXYtoIndex(x, y);
+            const index = mapXYtoIndex(cols - 1 - x, y);
             if (index < numLeds) {
                 ledBuffer[index] = grid[y][x];
             }
