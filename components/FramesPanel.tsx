@@ -18,7 +18,7 @@ interface FramesPanelProps {
 const FrameThumbnail: React.FC<{ grid: Grid, isSelected: boolean, onClick: () => void }> = ({ grid, isSelected, onClick }) => (
   <div
     onClick={onClick}
-    className={`aspect-[22/9] w-full grid gap-px p-1 bg-black rounded cursor-pointer border-2 transition-colors ${isSelected ? 'border-cyan-400' : 'border-gray-600 hover:border-gray-500'}`}
+    className={`aspect-[22/10] w-full grid gap-px p-1 bg-black rounded cursor-pointer border-2 transition-colors ${isSelected ? 'border-cyan-400' : 'border-gray-600 hover:border-gray-500'}`}
     style={{ gridTemplateColumns: `repeat(${COLS}, 1fr)` }}
   >
     {grid.map((row, y) =>
