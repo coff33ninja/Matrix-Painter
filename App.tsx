@@ -1,21 +1,22 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
-import { MatrixGrid } from './components/MatrixGrid';
-import { Toolbar } from './components/Toolbar';
-import { FramesPanel } from './components/FramesPanel';
-import { SerialPanel } from './components/SerialPanel';
-import { TextPanel } from './components/TextPanel';
-import { useSerial } from './hooks/useSerial';
-import { useAnimationLoop } from './hooks/useAnimationLoop';
-import { generateRainbowFrame, generatePlasmaFrame } from './lib/animations';
-import { createEmptyGrid, floodFill, renderText, getTextWidth } from './lib/utils';
-import type { Grid, RGBColor, Tool, AnimationId, Direction } from './types';
-import { Animation } from './types';
-import { ROWS, COLS } from './constants';
-import { FONT } from './lib/font';
+import { MatrixGrid } from './components/MatrixGrid.js';
+import { Toolbar } from './components/Toolbar.js';
+import { FramesPanel } from './components/FramesPanel.js';
+import { SerialPanel } from './components/SerialPanel.js';
+import { TextPanel } from './components/TextPanel.js';
+import { useSerial } from './hooks/useSerial.js';
+import { useAnimationLoop } from './hooks/useAnimationLoop.js';
+import { generateRainbowFrame, generatePlasmaFrame } from './lib/animations.js';
+import { createEmptyGrid, floodFill, renderText, getTextWidth } from './lib/utils.js';
+import type { Grid, RGBColor, Tool, AnimationId, Direction } from './types.js';
+import { Animation } from './types.js';
+import { ROWS, COLS } from './constants.js';
+import { FONT } from './lib/font.js';
 
 
 const App: React.FC = () => {
     const [animationFrames, setAnimationFrames] = useState<Grid[]>([createEmptyGrid()]);
+    const [proceduralFrame, setProceduralFrame] = useState<Grid | null>(null); // Separate state for procedural animations
     const [currentFrameIndex, setCurrentFrameIndex] = useState(0);
     const [color, setColor] = useState<RGBColor>({ r: 255, g: 0, b: 255 });
     const [tool, setTool] = useState<Tool>('Pencil');
@@ -30,35 +31,37 @@ const App: React.FC = () => {
     const { isConnected, isConnecting, connect, disconnect, sendPixel, sendFrame, setBrightnessValue } = useSerial();
     const isAnimationRunning = animationId !== Animation.None;
     
-    // Derived state for the current grid
-    const grid = useMemo(() => animationFrames[currentFrameIndex] || createEmptyGrid(), [animationFrames, currentFrameIndex]);
+    // Derived state for the current grid - use procedural frame if available, otherwise use custom frames
+    const grid = useMemo(() => {
+        if (proceduralFrame && isAnimationRunning && animationId !== Animation.Custom) {
+            return proceduralFrame;
+        }
+        return animationFrames[currentFrameIndex] || createEmptyGrid();
+    }, [proceduralFrame, animationFrames, currentFrameIndex, isAnimationRunning, animationId]);
 
     const animationCallback = useCallback((time: number) => {
         let newGrid: Grid;
         switch (animationId) {
             case Animation.Rainbow:
                 newGrid = generateRainbowFrame(time * (animationSpeed / 100), animationDirection);
-                setAnimationFrames([newGrid]); // Procedural animations have one "frame"
-                setCurrentFrameIndex(0);
+                setProceduralFrame(newGrid);
                 break;
             case Animation.Plasma:
                 newGrid = generatePlasmaFrame(time * (animationSpeed / 100), animationDirection);
-                setAnimationFrames([newGrid]);
-                setCurrentFrameIndex(0);
+                setProceduralFrame(newGrid);
                 break;
             case Animation.Custom:
                 const frameIndex = Math.floor(time * customAnimationFps) % animationFrames.length;
+                setCurrentFrameIndex(frameIndex);
                 newGrid = animationFrames[frameIndex];
-                setCurrentFrameIndex(frameIndex); // Update index for thumbnail highlight
                 break;
             case Animation.TextScroll:
                 const textWidth = getTextWidth(scrollingText, FONT);
-                const scrollSpeed = animationSpeed * 10; // Adjust speed for smoother scrolling
+                const scrollSpeed = animationSpeed * 10;
                 const totalWidth = COLS + textWidth;
                 const startX = COLS - (Math.floor(time * scrollSpeed) % totalWidth);
                 newGrid = renderText(createEmptyGrid(), scrollingText, FONT, color, startX);
-                setAnimationFrames([newGrid]);
-                setCurrentFrameIndex(0);
+                setProceduralFrame(newGrid);
                 break;
             default:
                 return;
@@ -68,14 +71,14 @@ const App: React.FC = () => {
 
     useAnimationLoop(animationCallback, isAnimationRunning);
 
+    // Fixed: Only copy and modify the specific frame being updated
     const updateCurrentFrame = useCallback((updater: (grid: Grid) => Grid) => {
         setAnimationFrames(prevFrames => {
-            const newFrames = prevFrames.map(frame => frame.map(row => [...row])); // Deep copy
-            newFrames[currentFrameIndex] = updater(newFrames[currentFrameIndex]);
+            const newFrames = [...prevFrames];
+            newFrames[currentFrameIndex] = updater(prevFrames[currentFrameIndex]);
             return newFrames;
         });
     }, [currentFrameIndex]);
-
 
     const handleSetPixel = useCallback((x: number, y: number, newColor: RGBColor) => {
         updateCurrentFrame(currentGrid => {
@@ -87,23 +90,32 @@ const App: React.FC = () => {
     }, [sendPixel, updateCurrentFrame]);
 
     const handleFloodFill = useCallback((x: number, y: number, fillColor: RGBColor) => {
-        const newGrid = floodFill(grid, x, y, fillColor);
+        const currentGrid = animationFrames[currentFrameIndex] || createEmptyGrid();
+        const newGrid = floodFill(currentGrid, x, y, fillColor);
         updateCurrentFrame(() => newGrid);
         sendFrame(newGrid);
-    }, [grid, sendFrame, updateCurrentFrame]);
+    }, [animationFrames, currentFrameIndex, sendFrame, updateCurrentFrame]);
 
+    // Fixed: Simplified conditional logic
     const handleCellInteraction = useCallback((x: number, y: number) => {
-        // Only stop animation if it's not a custom animation being edited with Pencil/Fill
-        if (isAnimationRunning && !(animationId === Animation.Custom && (tool === 'Pencil' || tool === 'Fill'))) {
+        const shouldStopAnimation = isAnimationRunning && 
+            !(animationId === Animation.Custom && (tool === 'Pencil' || tool === 'Fill'));
+
+        if (shouldStopAnimation) {
             setAnimationId(Animation.None);
+            setProceduralFrame(null); // Clear procedural frame when stopping animation
         }
 
-        if (tool === 'Pencil') {
-            handleSetPixel(x, y, color);
-        } else if (tool === 'Fill') {
-            handleFloodFill(x, y, color);
-        } else if (tool === 'Erase') {
-            handleSetPixel(x, y, { r: 0, g: 0, b: 0 });
+        switch (tool) {
+            case 'Pencil':
+                handleSetPixel(x, y, color);
+                break;
+            case 'Fill':
+                handleFloodFill(x, y, color);
+                break;
+            case 'Erase':
+                handleSetPixel(x, y, { r: 0, g: 0, b: 0 });
+                break;
         }
     }, [isAnimationRunning, tool, color, handleSetPixel, handleFloodFill, animationId]);
     
@@ -112,7 +124,10 @@ const App: React.FC = () => {
     }, [setBrightnessValue]);
 
     const handleClearGrid = useCallback(() => {
-        if (isAnimationRunning) setAnimationId(Animation.None);
+        if (isAnimationRunning) {
+            setAnimationId(Animation.None);
+            setProceduralFrame(null);
+        }
         const newGrid = createEmptyGrid();
         updateCurrentFrame(() => newGrid);
         sendFrame(newGrid);
@@ -123,7 +138,10 @@ const App: React.FC = () => {
             setScrollingText(text);
             setAnimationId(Animation.TextScroll);
         } else {
-            if (isAnimationRunning) setAnimationId(Animation.None);
+            if (isAnimationRunning) {
+                setAnimationId(Animation.None);
+                setProceduralFrame(null);
+            }
             const newGrid = renderText(createEmptyGrid(), text, FONT, color, 0);
             setAnimationFrames(prev => prev.map((frame, index) => index === currentFrameIndex ? newGrid : frame));
             sendFrame(newGrid);
@@ -132,7 +150,10 @@ const App: React.FC = () => {
 
     // Frame management handlers
     const handleSelectFrame = useCallback((index: number) => {
-        if (isAnimationRunning) setAnimationId(Animation.None);
+        if (isAnimationRunning) {
+            setAnimationId(Animation.None);
+            setProceduralFrame(null);
+        }
         setCurrentFrameIndex(index);
         sendFrame(animationFrames[index]);
     }, [isAnimationRunning, animationFrames, sendFrame]);
@@ -143,7 +164,7 @@ const App: React.FC = () => {
     }, [animationFrames.length]);
 
     const handleDeleteFrame = useCallback((index: number) => {
-        if (animationFrames.length <= 1) return; // Don't delete the last frame
+        if (animationFrames.length <= 1) return;
         const newFrames = animationFrames.filter((_, i) => i !== index);
         setAnimationFrames(newFrames);
         setCurrentFrameIndex(prev => Math.min(prev, newFrames.length - 1));
@@ -156,6 +177,12 @@ const App: React.FC = () => {
         setCurrentFrameIndex(index + 1);
     }, [animationFrames]);
 
+    // Clear procedural frame when animation stops
+    useEffect(() => {
+        if (!isAnimationRunning) {
+            setProceduralFrame(null);
+        }
+    }, [isAnimationRunning]);
 
     return (
         <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-start p-4 font-sans">

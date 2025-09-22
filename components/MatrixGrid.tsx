@@ -1,7 +1,6 @@
-
 import React from 'react';
-import type { Grid, RGBColor } from '../types';
-import { COLS } from '../constants';
+import type { Grid, RGBColor } from '../types.js';
+import { COLS } from '../constants.js';
 
 interface MatrixGridProps {
   grid: Grid;
@@ -10,11 +9,12 @@ interface MatrixGridProps {
   disabled: boolean;
 }
 
+// Fixed: Moved Cell component outside to prevent recreation on every render
 const Cell: React.FC<{
   color: RGBColor;
   onClick: () => void;
   onMouseEnter: () => void;
-}> = ({ color, onClick, onMouseEnter }) => {
+}> = React.memo(({ color, onClick, onMouseEnter }) => {
   const cellColor = `rgb(${color.r}, ${color.g}, ${color.b})`;
   const shadowColor = `rgba(${color.r}, ${color.g}, ${color.b}, 0.6)`;
   const isOff = color.r === 0 && color.g === 0 && color.b === 0;
@@ -31,8 +31,9 @@ const Cell: React.FC<{
       onMouseEnter={onMouseEnter}
     />
   );
-};
+});
 
+Cell.displayName = 'Cell';
 
 export const MatrixGrid: React.FC<MatrixGridProps> = ({ grid, onCellClick, isMouseDown, disabled }) => {
   const handleCellMouseEnter = (x: number, y: number) => {
