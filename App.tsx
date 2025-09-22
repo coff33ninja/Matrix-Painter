@@ -14,6 +14,8 @@ import type { Grid, RGBColor, Tool, AnimationId, Direction } from './types';
 import { Animation } from './types';
 import { ROWS, COLS } from './constants';
 import { FONT } from './lib/font';
+import Sidebar from './components/Sidebar';
+import Optional from './components/Optional';
 
 
 const App: React.FC = () => {
@@ -30,6 +32,7 @@ const App: React.FC = () => {
     const [animationDirection, setAnimationDirection] = useState<Direction>('right');
     const [customAnimationFps, setCustomAnimationFps] = useState(10);
     const [scrollingText, setScrollingText] = useState('');
+    const [isClockActive, setIsClockActive] = useState(false); // New state for clock activity
     const calculatorRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -153,12 +156,14 @@ const App: React.FC = () => {
         const newGrid = createEmptyGrid();
         updateCurrentFrame(() => newGrid);
         sendFrame(newGrid);
-    }, [isAnimationRunning, sendFrame, updateCurrentFrame]);
+        setIsClockActive(false); // Deactivate clock on clear
+    }, [isAnimationRunning, sendFrame, updateCurrentFrame, setIsClockActive]);
 
     const handleTextSubmit = useCallback((text: string, scroll: boolean) => {
         if (scroll) {
             setScrollingText(text);
             setAnimationId(Animation.TextScroll);
+            setIsClockActive(false); // Deactivate clock if other text is scrolling
         } else {
             if (isAnimationRunning) {
                 setAnimationId(Animation.None);
@@ -167,8 +172,14 @@ const App: React.FC = () => {
             const newGrid = renderText(createEmptyGrid(), text, FONT, color, 0);
             setAnimationFrames(prev => prev.map((frame, index) => index === currentFrameIndex ? newGrid : frame));
             sendFrame(newGrid);
+            // If the submitted text is from the clock, activate clock auto-update
+            if (text.match(/^\d{2}:\d{2}$/)) { // Simple regex to check if it looks like HH:MM
+                setIsClockActive(true);
+            } else {
+                setIsClockActive(false);
+            }
         }
-    }, [isAnimationRunning, color, sendFrame, setScrollingText, setAnimationId, currentFrameIndex]);
+    }, [isAnimationRunning, color, sendFrame, setScrollingText, setAnimationId, currentFrameIndex, setIsClockActive]);
 
     // Frame management handlers
     const handleSelectFrame = useCallback((index: number) => {
@@ -178,26 +189,30 @@ const App: React.FC = () => {
         }
         setCurrentFrameIndex(index);
         sendFrame(animationFrames[index]);
-    }, [isAnimationRunning, animationFrames, sendFrame]);
+        setIsClockActive(false); // Deactivate clock if frame is changed
+    }, [isAnimationRunning, animationFrames, sendFrame, setIsClockActive]);
 
     const handleAddFrame = useCallback(() => {
         setAnimationFrames(prev => [...prev, createEmptyGrid()]);
         setCurrentFrameIndex(animationFrames.length);
-    }, [animationFrames.length]);
+        setIsClockActive(false); // Deactivate clock if new frame is added
+    }, [animationFrames.length, setIsClockActive]);
 
     const handleDeleteFrame = useCallback((index: number) => {
         if (animationFrames.length <= 1) return;
         const newFrames = animationFrames.filter((_, i) => i !== index);
         setAnimationFrames(newFrames);
         setCurrentFrameIndex(prev => Math.min(prev, newFrames.length - 1));
-    }, [animationFrames]);
+        setIsClockActive(false); // Deactivate clock if frame is deleted
+    }, [animationFrames, setIsClockActive]);
 
     const handleDuplicateFrame = useCallback((index: number) => {
         const frameToDuplicate = animationFrames[index].map(row => [...row]);
         const newFrames = [...animationFrames.slice(0, index + 1), frameToDuplicate, ...animationFrames.slice(index + 1)];
         setAnimationFrames(newFrames);
         setCurrentFrameIndex(index + 1);
-    }, [animationFrames]);
+        setIsClockActive(false); // Deactivate clock if frame is duplicated
+    }, [animationFrames, setIsClockActive]);
 
     // Clear procedural frame when animation stops
     useEffect(() => {
@@ -218,7 +233,8 @@ const App: React.FC = () => {
                     </button>
                 </header>
 
-                <main className="flex flex-col lg:flex-row gap-6">
+                <main className="flex flex-col lg:flex-row gap-6 relative">
+                    <div className="flex flex-col lg:flex-row flex-grow gap-6">
                     <div className="w-full lg:w-72 space-y-6 flex-shrink-0">
                         <SerialPanel
                             onConnect={connect}
@@ -271,6 +287,10 @@ const App: React.FC = () => {
                             disabled={!isConnected}
                         />
                     </div>
+                </div>
+                <Sidebar>
+                    <Optional onDisplayTime={(text) => handleTextSubmit(text, false)} isClockActive={isClockActive} setIsClockActive={setIsClockActive} />
+                </Sidebar>
                 </main>
                 {showCalculator && (
                     <div ref={calculatorRef} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gray-800 p-4 rounded-lg shadow-lg z-50 max-w-full sm:max-w-3xl lg:max-w-5xl max-h-screen overflow-y-auto">
