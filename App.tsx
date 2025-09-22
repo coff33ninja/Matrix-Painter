@@ -11,6 +11,7 @@ import { createEmptyGrid, floodFill, renderText, getTextWidth } from './lib/util
 import type { Grid, RGBColor, Tool, AnimationId, Direction } from './types';
 import { Animation } from './types';
 import { ROWS, COLS } from './constants';
+import { FONT } from './lib/font';
 
 
 const App: React.FC = () => {
@@ -51,11 +52,11 @@ const App: React.FC = () => {
                 setCurrentFrameIndex(frameIndex); // Update index for thumbnail highlight
                 break;
             case Animation.TextScroll:
-                const textWidth = getTextWidth(scrollingText);
+                const textWidth = getTextWidth(scrollingText, FONT);
                 const scrollSpeed = animationSpeed * 10; // Adjust speed for smoother scrolling
                 const totalWidth = COLS + textWidth;
                 const startX = COLS - (Math.floor(time * scrollSpeed) % totalWidth);
-                newGrid = renderText(createEmptyGrid(), scrollingText, color, startX, 0);
+                newGrid = renderText(createEmptyGrid(), scrollingText, FONT, color, startX);
                 setAnimationFrames([newGrid]);
                 setCurrentFrameIndex(0);
                 break;
@@ -123,7 +124,7 @@ const App: React.FC = () => {
             setAnimationId(Animation.TextScroll);
         } else {
             if (isAnimationRunning) setAnimationId(Animation.None);
-            const newGrid = renderText(createEmptyGrid(), text, color, 0, 0);
+            const newGrid = renderText(createEmptyGrid(), text, FONT, color, 0);
             setAnimationFrames(prev => prev.map((frame, index) => index === currentFrameIndex ? newGrid : frame));
             sendFrame(newGrid);
         }

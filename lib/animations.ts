@@ -2,9 +2,7 @@
 import type { Grid, RGBColor, Direction } from '../types';
 import { ROWS, COLS } from '../constants';
 
-const createGrid = (): Grid => Array.from({ length: ROWS }, () =>
-  Array.from({ length: COLS }, () => ({ r: 0, g: 0, b: 0 }))
-);
+import { createEmptyGrid } from './utils';
 
 const hsvToRgb = (h: number, s: number, v: number): RGBColor => {
     let r = 0, g = 0, b = 0;
@@ -29,7 +27,7 @@ const hsvToRgb = (h: number, s: number, v: number): RGBColor => {
 };
 
 export const generateRainbowFrame = (time: number, direction: Direction): Grid => {
-    const grid = createGrid();
+    const grid = createEmptyGrid();
     for (let y = 0; y < ROWS; y++) {
         for (let x = 0; x < COLS; x++) {
             let val;
@@ -48,7 +46,7 @@ export const generateRainbowFrame = (time: number, direction: Direction): Grid =
 
 
 export const generatePlasmaFrame = (time: number, direction: Direction): Grid => {
-    const grid = createGrid();
+    const grid = createEmptyGrid();
     for (let y = 0; y < ROWS; y++) {
         for (let x = 0; x < COLS; x++) {
             let dx, dy;

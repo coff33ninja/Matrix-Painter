@@ -19,3 +19,5 @@ export enum Animation {
 export type AnimationId = Animation;
 
 export type Direction = 'up' | 'down' | 'left' | 'right';
+
+export type Font = { [key: string]: number[][] };

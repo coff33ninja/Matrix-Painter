@@ -1,10 +1,9 @@
 import { ROWS, COLS } from '../constants';
-import type { Grid, RGBColor } from '../types';
-import { FONT } from './font';
+import type { Grid, RGBColor, Font } from '../types';
 
 export const createEmptyGrid = (): Grid => {
   return Array.from({ length: ROWS }, () =>
-    Array(COLS).fill({ r: 0, g: 0, b: 0 })
+    Array.from({ length: COLS }, () => ({ r: 0, g: 0, b: 0 }))
   );
 };
 
@@ -46,10 +45,10 @@ export const floodFill = (grid: Grid, startX: number, startY: number, fillColor:
     return newGrid;
 };
 
-export const getTextWidth = (text: string): number => {
+export const getTextWidth = (text: string, font: Font): number => {
     let width = 0;
     for (const char of text.toUpperCase()) {
-        const charData = FONT[char];
+        const charData = font[char];
         if (charData) {
             width += charData[0].length + 1; // Add 1 for spacing
         }
@@ -57,20 +56,20 @@ export const getTextWidth = (text: string): number => {
     return width;
 }
 
-export const renderText = (grid: Grid, text: string, color: RGBColor, startX: number, startY: number): Grid => {
+export const renderText = (grid: Grid, text: string, font: Font, color: RGBColor, startX: number): Grid => {
   const newGrid = grid.map(row => [...row]);
   let currentX = startX;
   const fontHeight = 5; // The font is 5 pixels high
   const yOffset = Math.floor((ROWS - fontHeight) / 2);
 
   for (const char of text.toUpperCase()) {
-    const charData = FONT[char];
+    const charData = font[char];
     if (charData) {
       for (let y = 0; y < charData.length; y++) {
         for (let x = 0; x < charData[y].length; x++) {
           if (charData[y][x] === 1) {
             const gridX = currentX + x;
-            const gridY = startY + y + yOffset;
+            const gridY = y + yOffset;
             if (gridX >= 0 && gridX < COLS && gridY >= 0 && gridY < ROWS) {
               newGrid[gridY][gridX] = color;
             }
