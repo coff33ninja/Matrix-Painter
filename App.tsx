@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import React, { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import { MatrixGrid } from './components/MatrixGrid';
 import { Toolbar } from './components/Toolbar';
 import { FramesPanel } from './components/FramesPanel';
@@ -30,6 +30,25 @@ const App: React.FC = () => {
     const [animationDirection, setAnimationDirection] = useState<Direction>('right');
     const [customAnimationFps, setCustomAnimationFps] = useState(10);
     const [scrollingText, setScrollingText] = useState('');
+    const calculatorRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (calculatorRef.current && !calculatorRef.current.contains(event.target as Node)) {
+                setShowCalculator(false);
+            }
+        }
+
+        if (showCalculator) {
+            document.addEventListener('mousedown', handleClickOutside);
+        } else {
+            document.removeEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [showCalculator]);
     
     const { isConnected, isConnecting, connect, disconnect, sendPixel, sendFrame, setBrightnessValue } = useSerial();
     const isAnimationRunning = animationId !== Animation.None;
@@ -254,7 +273,7 @@ const App: React.FC = () => {
                     </div>
                 </main>
                 {showCalculator && (
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gray-800 p-4 rounded-lg shadow-lg z-50 max-w-full sm:max-w-3xl lg:max-w-5xl max-h-screen overflow-y-auto">
+                    <div ref={calculatorRef} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gray-800 p-4 rounded-lg shadow-lg z-50 max-w-full sm:max-w-3xl lg:max-w-5xl max-h-screen overflow-y-auto">
                         <Calculator />
                     </div>
                 )}
