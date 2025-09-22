@@ -1,17 +1,19 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
-import { MatrixGrid } from './components/MatrixGrid.js';
-import { Toolbar } from './components/Toolbar.js';
-import { FramesPanel } from './components/FramesPanel.js';
-import { SerialPanel } from './components/SerialPanel.js';
-import { TextPanel } from './components/TextPanel.js';
-import { useSerial } from './hooks/useSerial.js';
-import { useAnimationLoop } from './hooks/useAnimationLoop.js';
-import { generateRainbowFrame, generatePlasmaFrame } from './lib/animations.js';
-import { createEmptyGrid, floodFill, renderText, getTextWidth } from './lib/utils.js';
-import type { Grid, RGBColor, Tool, AnimationId, Direction } from './types.js';
-import { Animation } from './types.js';
-import { ROWS, COLS } from './constants.js';
-import { FONT } from './lib/font.js';
+import { MatrixGrid } from './components/MatrixGrid';
+import { Toolbar } from './components/Toolbar';
+import { FramesPanel } from './components/FramesPanel';
+import { SerialPanel } from './components/SerialPanel';
+import { TextPanel } from './components/TextPanel';
+import { Calculator } from './components/Calculator';
+import { CalculatorIcon } from './components/icons/CalculatorIcon';
+import { useSerial } from './hooks/useSerial';
+import { useAnimationLoop } from './hooks/useAnimationLoop';
+import { generateRainbowFrame, generatePlasmaFrame } from './lib/animations';
+import { createEmptyGrid, floodFill, renderText, getTextWidth } from './lib/utils';
+import type { Grid, RGBColor, Tool, AnimationId, Direction } from './types';
+import { Animation } from './types';
+import { ROWS, COLS } from './constants';
+import { FONT } from './lib/font';
 
 
 const App: React.FC = () => {
@@ -21,6 +23,7 @@ const App: React.FC = () => {
     const [color, setColor] = useState<RGBColor>({ r: 255, g: 0, b: 255 });
     const [tool, setTool] = useState<Tool>('Pencil');
     const [isMouseDown, setIsMouseDown] = useState(false);
+    const [showCalculator, setShowCalculator] = useState(false);
 
     const [animationId, setAnimationId] = useState<AnimationId>(Animation.None);
     const [animationSpeed, setAnimationSpeed] = useState(5);
@@ -191,6 +194,9 @@ const App: React.FC = () => {
                     <h1 className="text-3xl font-bold text-cyan-400 tracking-wider">
                         Live Matrix Designer
                     </h1>
+                    <button onClick={() => setShowCalculator(!showCalculator)} className="p-2 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                        <CalculatorIcon />
+                    </button>
                 </header>
 
                 <main className="flex flex-col lg:flex-row gap-6">
@@ -247,6 +253,11 @@ const App: React.FC = () => {
                         />
                     </div>
                 </main>
+                {showCalculator && (
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gray-800 p-4 rounded-lg shadow-lg z-50">
+                        <Calculator />
+                    </div>
+                )}
             </div>
              <footer className="text-center text-gray-500 mt-4 text-sm">
                 <p>Designed for a {COLS}x{ROWS} WS2812B Serpentine LED Matrix.</p>
