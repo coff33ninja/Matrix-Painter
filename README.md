@@ -58,4 +58,155 @@ To get this project up and running on your local machine:
 5.  **Text & Animations:** Enter text in the Text Panel and choose whether to display it statically or with a scrolling animation. Experiment with Rainbow and Plasma animations from the Toolbar.
 6.  **Adjust Brightness:** Use the brightness slider in the Toolbar to control the LED output.
 
+## Future Improvements
+
+### 🚀 High Impact, Easy Implementation
+
+#### Enhanced Drawing Tools
+- [ ] **Line Tool** - Draw straight lines between two points
+- [ ] **Rectangle Tool** - Hollow and filled rectangles  
+- [ ] **Circle Tool** - Perfect circles with radius selection
+- [ ] **Spray Tool** - Random pixel scatter effect
+- [ ] **Copy/Paste** - Select areas and duplicate them
+
+#### Color Management
+- [ ] **Color Palette Presets** - Save/load custom color schemes
+- [ ] **Color Picker from Grid** - Eyedropper tool to sample colors
+- [ ] **Gradient Tool** - Create smooth color transitions
+- [ ] **HSV Color Wheel** - More intuitive color selection
+- [ ] **Recent Colors** - Quick access to recently used colors
+
+#### Animation Enhancements
+- [ ] **Frame Onion Skinning** - See previous/next frames while editing
+- [ ] **Animation Speed Preview** - Real-time speed adjustment
+- [ ] **Bounce Animation** - Forward-backward loop mode
+- [ ] **Frame Interpolation** - Auto-generate in-between frames
+- [ ] **Animation Export** - Save as GIF/video files
+
+### 🎯 Medium Impact, Moderate Effort
+
+#### Advanced Text Features
+- [ ] **Multiple Font Support** - Load custom bitmap fonts
+- [ ] **Text Effects** - Outline, shadow, rainbow text
+- [ ] **Vertical Text** - Top-to-bottom text rendering
+- [ ] **Text Along Path** - Curved and shaped text
+- [ ] **Unicode Support** - Emoji and special characters
+
+#### Pattern & Template System
+- [ ] **Pattern Library** - Pre-made designs (hearts, stars, etc.)
+- [ ] **Template Gallery** - Holiday themes, logos, icons
+- [ ] **Pattern Generator** - Procedural patterns (checkerboard, waves)
+- [ ] **Import Images** - Convert small images to pixel art
+- [ ] **QR Code Generator** - Create scannable QR codes
+
+#### Advanced Animations
+- [ ] **Physics Simulation** - Bouncing balls, falling particles
+- [ ] **Fire Effect** - Realistic flame simulation
+- [ ] **Water Ripple** - Expanding circle effects
+- [ ] **Matrix Rain** - Classic "digital rain" effect
+- [ ] **Starfield** - Moving star background
+- [ ] **Conway's Game of Life** - Cellular automaton
+
+### 🛠️ Power User Features
+
+#### Layering System
+- [ ] **Multiple Layers** - Background, foreground, effects
+- [ ] **Blend Modes** - Add, multiply, overlay effects
+- [ ] **Layer Opacity** - Transparent overlays
+- [ ] **Layer Groups** - Organize complex compositions
+
+#### Advanced Serial Features
+- [ ] **Multiple Matrix Support** - Control several matrices
+- [ ] **Serial Terminal** - Debug and send custom commands
+- [ ] **Device Profiles** - Save settings for different hardware
+- [ ] **Auto-Discovery** - Detect matrix dimensions automatically
+- [ ] **Firmware Updater** - Update device firmware via web
+
+#### Project Management
+- [ ] **Save/Load Projects** - Complete project files
+- [ ] **Export Formats** - JSON, binary, C++ arrays
+- [ ] **Project History** - Undo/redo for entire sessions
+- [ ] **Backup System** - Auto-save and recovery
+- [ ] **Version Control** - Track project changes
+
+### 🎮 Interactive Features
+
+#### Games & Demos
+- [ ] **Snake Game** - Classic snake with score display
+- [ ] **Pong** - Two-player paddle game
+- [ ] **Tetris** - Falling blocks puzzle
+- [ ] **Clock Display** - Digital/analog clock faces
+- [ ] **Weather Display** - Live weather animations
+
+#### Real-time Integration
+- [ ] **Music Visualizer** - React to audio input
+- [ ] **Webcam Integration** - Live video to pixel art
+- [ ] **Social Media Display** - Show notifications/feeds
+- [ ] **Stock Ticker** - Scrolling financial data
+- [ ] **News Feed** - Live news headlines
+
+### 💡 Creative Tools
+
+#### Advanced Effects
+- [ ] **Blur/Sharpen** - Image processing effects
+- [ ] **Color Filters** - Sepia, negative, posterize
+- [ ] **Dithering** - Better color reduction algorithms
+- [ ] **Noise Generation** - Random texture effects
+- [ ] **Edge Detection** - Outline extraction
+
+#### Interactive Drawing
+- [ ] **Pressure Sensitivity** - Variable opacity/size (if supported)
+- [ ] **Gesture Recognition** - Draw shapes by gesture
+- [ ] **Auto-Complete** - Suggest shape completions
+- [ ] **Smart Fill** - Intelligent flood fill with options
+- [ ] **Magnetic Selection** - Edge-aware selection tools
+
+### 🌐 Web & Connectivity
+
+#### Cloud Features
+- [ ] **Online Gallery** - Share creations with community
+- [ ] **Cloud Sync** - Save projects to cloud storage
+- [ ] **Collaboration** - Real-time multi-user editing
+- [ ] **Template Sharing** - Community template library
+
+#### Advanced Connectivity
+- [ ] **WiFi Configuration** - Set up device WiFi via web
+- [ ] **MQTT Support** - IoT integration and control
+- [ ] **API Endpoints** - REST API for external control
+- [ ] **Webhook Integration** - Trigger animations from external events
+
+### 📊 Development Phases
+
+#### Phase 1 (Quick Wins) 🏃‍♂️
+- [ ] Line/Rectangle/Circle Tools
+- [ ] Color Palette Presets
+- [ ] Frame Onion Skinning
+- [ ] Pattern Library
+
+#### Phase 2 (Enhanced Experience) 🎨
+- [ ] Advanced Text Effects
+- [ ] Physics Animations
+- [ ] Save/Load Projects
+- [ ] Multiple Layers
+
+#### Phase 3 (Pro Features) 🚀
+- [ ] Music Visualizer
+- [ ] Games Integration
+- [ ] Cloud Sync
+- [ ] Real-time Collaboration
+
+---
+
+## Recent Updates
+
+### ✅ Performance & Code Quality Improvements (Latest)
+- [x] **Fixed inefficient deep copying** in frame updates
+- [x] **Optimized Cell component rendering** with React.memo
+- [x] **Enhanced error handling** in serial communication
+- [x] **Added loading states** for better UX
+- [x] **Separated animation states** to prevent frame overwrites
+- [x] **Improved TypeScript typing** throughout codebase
+- [x] **Enhanced buffer allocation** for better performance
+- [x] **Proper useCallback implementation** to prevent unnecessary re-renders
+
 Enjoy designing!
