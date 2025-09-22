@@ -461,7 +461,7 @@ export const Calculator = () => {
 
   const InputGroup: React.FC<InputGroupProps> = ({ label, children, info }) => (
     <div className="mb-4">
-      <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
+      <label className="flex items-center text-sm font-medium text-gray-300 mb-2">
         {label}
         {info && (
           <div className="ml-2 group relative">
@@ -477,14 +477,14 @@ export const Calculator = () => {
   );
 
   return (
-    <div className="max-w-7xl mx-auto p-6 bg-gray-50 min-h-screen">
-      <div className="bg-white rounded-lg shadow-lg">
-        <div className="p-6 border-b border-gray-200">
+    <div className="max-w-7xl mx-auto p-6 bg-gray-900 min-h-0 text-gray-100">
+      <div className="bg-gray-800 rounded-lg shadow-lg">
+        <div className="p-6 border-b border-gray-700">
           <div className="flex items-center gap-3">
-            <CalculatorIconLucide className="w-8 h-8 text-blue-600" />
+            <CalculatorIconLucide className="w-8 h-8 text-cyan-400" />
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">LED System Calculator</h1>
-              <p className="text-gray-600">Complete power, thermal, optical, and cost analysis for LED installations</p>
+              <h1 className="text-2xl font-bold text-cyan-300">Professional LED System Calculator</h1>
+              <p className="text-gray-400">Complete power, thermal, optical, and cost analysis for LED installations</p>
             </div>
           </div>
         </div>
@@ -492,7 +492,7 @@ export const Calculator = () => {
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 p-6">
           {/* Input Section */}
           <div className="xl:col-span-1 space-y-4">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">Configuration</h2>
+            <h2 className="text-xl font-semibold text-gray-100 mb-4">Configuration</h2>
             
             <InputGroup 
               label="LED Type" 
@@ -501,7 +501,7 @@ export const Calculator = () => {
               <select 
                 value={inputs.ledType}
                 onChange={(e) => handleInputChange('ledType', e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full p-3 border border-gray-600 rounded-md focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 bg-gray-700 text-white"
               >
                 <optgroup label="Standard LEDs">
                   <option value="white_3mm">White 3mm LED (Cool)</option>
@@ -547,7 +547,7 @@ export const Calculator = () => {
                       step="0.1"
                       value={inputs.customForwardVoltage}
                       onChange={(e) => handleInputChange('customForwardVoltage', e.target.value)}
-                      className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                      className="w-full p-2 border border-gray-600 rounded-md focus:ring-2 focus:ring-cyan-500 bg-gray-700 text-white"
                     />
                   </InputGroup>
                   <InputGroup label="Forward Current (mA)">
@@ -556,7 +556,7 @@ export const Calculator = () => {
                       step="1"
                       value={inputs.customForwardCurrent}
                       onChange={(e) => handleInputChange('customForwardCurrent', e.target.value)}
-                      className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                      className="w-full p-2 border border-gray-600 rounded-md focus:ring-2 focus:ring-cyan-500 bg-gray-700 text-white"
                     />
                   </InputGroup>
                 </div>
@@ -567,7 +567,7 @@ export const Calculator = () => {
                       step="1"
                       value={inputs.customLumens}
                       onChange={(e) => handleInputChange('customLumens', e.target.value)}
-                      className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                      className="w-full p-2 border border-gray-600 rounded-md focus:ring-2 focus:ring-cyan-500 bg-gray-700 text-white"
                     />
                   </InputGroup>
                   <InputGroup label="CCT (K)">
@@ -576,7 +576,7 @@ export const Calculator = () => {
                       step="100"
                       value={inputs.customCCT}
                       onChange={(e) => handleInputChange('customCCT', e.target.value)}
-                      className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                      className="w-full p-2 border border-gray-600 rounded-md focus:ring-2 focus:ring-cyan-500 bg-gray-700 text-white"
                     />
                   </InputGroup>
                   <InputGroup label="CRI">
@@ -587,7 +587,7 @@ export const Calculator = () => {
                       max="100"
                       value={inputs.customCRI}
                       onChange={(e) => handleInputChange('customCRI', e.target.value)}
-                      className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                      className="w-full p-2 border border-gray-600 rounded-md focus:ring-2 focus:ring-cyan-500 bg-gray-700 text-white"
                     />
                   </InputGroup>
                 </div>
@@ -602,7 +602,7 @@ export const Calculator = () => {
                   min="0.1"
                   value={inputs.length}
                   onChange={(e) => handleInputChange('length', e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-3 border border-gray-600 rounded-md focus:ring-2 focus:ring-cyan-500 bg-gray-700 text-white"
                 />
               </InputGroup>
               <InputGroup label="LEDs per Meter">
@@ -612,7 +612,7 @@ export const Calculator = () => {
                   min="1"
                   value={inputs.ledsPerMeter}
                   onChange={(e) => handleInputChange('ledsPerMeter', e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-3 border border-gray-600 rounded-md focus:ring-2 focus:ring-cyan-500 bg-gray-700 text-white"
                 />
               </InputGroup>
             </div>
@@ -625,7 +625,7 @@ export const Calculator = () => {
                   min="1"
                   value={inputs.supplyVoltage}
                   onChange={(e) => handleInputChange('supplyVoltage', e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-3 border border-gray-600 rounded-md focus:ring-2 focus:ring-cyan-500 bg-gray-700 text-white"
                 />
               </InputGroup>
               <InputGroup label="Supply Current (A)">
@@ -635,7 +635,7 @@ export const Calculator = () => {
                   min="0.1"
                   value={inputs.supplyAmps}
                   onChange={(e) => handleInputChange('supplyAmps', e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-3 border border-gray-600 rounded-md focus:ring-2 focus:ring-cyan-500 bg-gray-700 text-white"
                 />
               </InputGroup>
             </div>
@@ -666,7 +666,7 @@ export const Calculator = () => {
                   <select 
                     value={inputs.driverType}
                     onChange={(e) => handleInputChange('driverType', e.target.value)}
-                    className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-2 border border-gray-600 rounded-md focus:ring-2 focus:ring-cyan-500 bg-gray-700 text-white"
                   >
                     <option value="linear">Linear Driver (75% eff)</option>
                     <option value="switching">Switching Driver (90% eff)</option>
@@ -680,7 +680,7 @@ export const Calculator = () => {
               <select 
                 value={inputs.dimmingType}
                 onChange={(e) => handleInputChange('dimmingType', e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                className="w-full p-3 border border-gray-600 rounded-md focus:ring-2 focus:ring-cyan-500 bg-gray-700 text-white"
               >
                 <option value="none">No Dimming</option>
                 <option value="linear">Linear/Analog Dimming</option>
@@ -689,26 +689,26 @@ export const Calculator = () => {
               {inputs.dimmingType !== 'none' && (
                 <div className="mt-2 grid grid-cols-2 gap-2">
                   <div>
-                    <label className="text-xs text-gray-600">Dimming Level (%)</label>
+                    <label className="text-xs text-gray-300">Dimming Level (%)</label>
                     <input
                       type="number"
                       min="1"
                       max="100"
                       value={inputs.dimmingDepth}
                       onChange={(e) => handleInputChange('dimmingDepth', e.target.value)}
-                      className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                      className="w-full p-2 border border-gray-600 rounded-md focus:ring-2 focus:ring-cyan-500 bg-gray-700 text-white"
                     />
                   </div>
                   {inputs.dimmingType === 'pwm' && (
                     <div>
-                      <label className="text-xs text-gray-600">PWM Freq (Hz)</label>
+                      <label className="text-xs text-gray-300">PWM Freq (Hz)</label>
                       <input
                         type="number"
                         min="100"
                         max="20000"
                         value={inputs.pwmFrequency}
                         onChange={(e) => handleInputChange('pwmFrequency', e.target.value)}
-                        className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                        className="w-full p-2 border border-gray-600 rounded-md focus:ring-2 focus:ring-cyan-500 bg-gray-700 text-white"
                       />
                     </div>
                   )}
@@ -721,7 +721,7 @@ export const Calculator = () => {
                 <select 
                   value={inputs.wireGauge}
                   onChange={(e) => handleInputChange('wireGauge', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-2 border border-gray-600 rounded-md focus:ring-2 focus:ring-cyan-500 bg-gray-700 text-white"
                 >
                   <option value="12">12 AWG (20A)</option>
                   <option value="14">14 AWG (15A)</option>
@@ -739,7 +739,7 @@ export const Calculator = () => {
                   min="0.1"
                   value={inputs.wireLength}
                   onChange={(e) => handleInputChange('wireLength', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-2 border border-gray-600 rounded-md focus:ring-2 focus:ring-cyan-500 bg-gray-700 text-white"
                 />
               </InputGroup>
               <InputGroup label="Ambient Temp (°C)">
@@ -748,7 +748,7 @@ export const Calculator = () => {
                   step="1"
                   value={inputs.ambientTemp}
                   onChange={(e) => handleInputChange('ambientTemp', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-2 border border-gray-600 rounded-md focus:ring-2 focus:ring-cyan-500 bg-gray-700 text-white"
                 />
               </InputGroup>
             </div>
@@ -762,7 +762,7 @@ export const Calculator = () => {
                   max="2.0"
                   value={inputs.coolingFactor}
                   onChange={(e) => handleInputChange('coolingFactor', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-2 border border-gray-600 rounded-md focus:ring-2 focus:ring-cyan-500 bg-gray-700 text-white"
                 />
               </InputGroup>
               <InputGroup label="Operating Hours/Day">
@@ -773,7 +773,7 @@ export const Calculator = () => {
                   max="24"
                   value={inputs.operatingHours}
                   onChange={(e) => handleInputChange('operatingHours', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-2 border border-gray-600 rounded-md focus:ring-2 focus:ring-cyan-500 bg-gray-700 text-white"
                 />
               </InputGroup>
               <InputGroup label="Cost per kWh ($)">
@@ -783,7 +783,7 @@ export const Calculator = () => {
                   min="0.01"
                   value={inputs.costPerKWh}
                   onChange={(e) => handleInputChange('costPerKWh', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-2 border border-gray-600 rounded-md focus:ring-2 focus:ring-cyan-500 bg-gray-700 text-white"
                 />
               </InputGroup>
             </div>
@@ -791,15 +791,15 @@ export const Calculator = () => {
 
           {/* Results Section */}
           <div className="xl:col-span-2 space-y-4">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">Analysis Results</h2>
+            <h2 className="text-xl font-semibold text-gray-100 mb-4">Analysis Results</h2>
             
             {warnings.length > 0 && (
-              <div className="bg-yellow-50 border border-yellow-200 rounded-md p-4">
+              <div className="bg-yellow-900/20 border border-yellow-700 rounded-md p-4">
                 <div className="flex items-start">
-                  <AlertTriangle className="w-5 h-5 text-yellow-600 mt-0.5 mr-2" />
+                  <AlertTriangle className="w-5 h-5 text-yellow-400 mt-0.5 mr-2" />
                   <div>
-                    <h3 className="text-yellow-800 font-medium">Design Warnings</h3>
-                    <ul className="text-yellow-700 text-sm mt-1">
+                    <h3 className="text-yellow-200 font-medium">Design Warnings</h3>
+                    <ul className="text-yellow-300 text-sm mt-1">
                       {warnings.map((warning, index) => (
                         <li key={index}>• {warning}</li>
                       ))}
@@ -811,8 +811,8 @@ export const Calculator = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {/* LED Configuration */}
-              <div className="bg-blue-50 p-4 rounded-md">
-                <h3 className="font-semibold text-blue-900 mb-2 flex items-center">
+              <div className="bg-blue-900/20 p-4 rounded-md">
+                <h3 className="font-semibold text-blue-300 mb-2 flex items-center">
                   <Zap className="w-4 h-4 mr-2" />
                   LED Configuration
                 </h3>
@@ -827,8 +827,8 @@ export const Calculator = () => {
               </div>
 
               {/* Power Analysis */}
-              <div className="bg-green-50 p-4 rounded-md">
-                <h3 className="font-semibold text-green-900 mb-2">Power Analysis</h3>
+              <div className="bg-green-900/20 p-4 rounded-md">
+                <h3 className="font-semibold text-green-300 mb-2">Power Analysis</h3>
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <div>LED Power: <span className="font-mono">{results.totalLEDPower?.toFixed(2)} W</span></div>
                   <div>System Power: <span className="font-mono">{results.totalSystemPower?.toFixed(2)} W</span></div>
@@ -840,8 +840,8 @@ export const Calculator = () => {
               </div>
 
               {/* Current Limiting Components */}
-              <div className="bg-purple-50 p-4 rounded-md">
-                <h3 className="font-semibold text-purple-900 mb-2">Current Control</h3>
+              <div className="bg-purple-900/20 p-4 rounded-md">
+                <h3 className="font-semibold text-purple-300 mb-2">Current Control</h3>
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   {!inputs.constantCurrent && !inputs.includeDriver ? (
                     <>
@@ -862,8 +862,8 @@ export const Calculator = () => {
               </div>
 
               {/* Wire and Distribution */}
-              <div className="bg-indigo-50 p-4 rounded-md">
-                <h3 className="font-semibold text-indigo-900 mb-2">Wire & Distribution</h3>
+              <div className="bg-indigo-900/20 p-4 rounded-md">
+                <h3 className="font-semibold text-indigo-300 mb-2">Wire & Distribution</h3>
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <div>Wire Gauge: <span className="font-mono">{inputs.wireGauge} AWG</span></div>
                   <div>Voltage Drop: <span className="font-mono">{results.wireVoltageDrop?.toFixed(2)} V</span></div>
@@ -875,8 +875,8 @@ export const Calculator = () => {
               </div>
 
               {/* Optical Performance */}
-              <div className="bg-yellow-50 p-4 rounded-md">
-                <h3 className="font-semibold text-yellow-900 mb-2 flex items-center">
+              <div className="bg-yellow-900/20 p-4 rounded-md">
+                <h3 className="font-semibold text-yellow-300 mb-2 flex items-center">
                   <Eye className="w-4 h-4 mr-2" />
                   Optical Performance
                 </h3>
@@ -891,8 +891,8 @@ export const Calculator = () => {
               </div>
 
               {/* Thermal Management */}
-              <div className="bg-red-50 p-4 rounded-md">
-                <h3 className="font-semibold text-red-900 mb-2 flex items-center">
+              <div className="bg-red-900/20 p-4 rounded-md">
+                <h3 className="font-semibold text-red-300 mb-2 flex items-center">
                   <Thermometer className="w-4 h-4 mr-2" />
                   Thermal Management
                 </h3>
@@ -907,8 +907,8 @@ export const Calculator = () => {
               </div>
 
               {/* Additional Components */}
-              <div className="bg-orange-50 p-4 rounded-md">
-                <h3 className="font-semibold text-orange-900 mb-2 flex items-center">
+              <div className="bg-orange-900/20 p-4 rounded-md">
+                <h3 className="font-semibold text-orange-300 mb-2 flex items-center">
                   <Cpu className="w-4 h-4 mr-2" />
                   Additional Components
                 </h3>
@@ -927,8 +927,8 @@ export const Calculator = () => {
               </div>
 
               {/* Power Supply Requirements */}
-              <div className="bg-gray-100 p-4 rounded-md">
-                <h3 className="font-semibold text-gray-900 mb-2">Power Supply Requirements</h3>
+              <div className="bg-gray-700/50 p-4 rounded-md">
+                <h3 className="font-semibold text-gray-100 mb-2">Power Supply Requirements</h3>
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <div>Min Voltage: <span className="font-mono">{results.recommendedPSVoltage} V</span></div>
                   <div>Min Current: <span className="font-mono">{results.recommendedPSCurrent?.toFixed(2)} A</span></div>
@@ -940,8 +940,8 @@ export const Calculator = () => {
               </div>
 
               {/* Cost Analysis */}
-              <div className="bg-emerald-50 p-4 rounded-md">
-                <h3 className="font-semibold text-emerald-900 mb-2">Cost Analysis</h3>
+              <div className="bg-emerald-900/20 p-4 rounded-md">
+                <h3 className="font-semibold text-emerald-300 mb-2">Cost Analysis</h3>
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <div>Annual Energy: <span className="font-mono">{results.annualEnergyConsumption?.toFixed(1)} kWh</span></div>
                   <div>Annual Cost: <span className="font-mono">${results.annualOperatingCost?.toFixed(2)}</span></div>

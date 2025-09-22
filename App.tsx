@@ -254,7 +254,7 @@ const App: React.FC = () => {
                     </div>
                 </main>
                 {showCalculator && (
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gray-800 p-4 rounded-lg shadow-lg z-50">
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gray-800 p-4 rounded-lg shadow-lg z-50 max-w-full sm:max-w-3xl lg:max-w-5xl max-h-screen overflow-y-auto">
                         <Calculator />
                     </div>
                 )}
