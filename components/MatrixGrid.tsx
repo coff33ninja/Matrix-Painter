@@ -43,7 +43,7 @@ export const MatrixGrid: React.FC<MatrixGridProps> = ({ grid, onCellClick, isMou
 
   return (
     <div
-      className={`aspect-[22/9] w-full max-w-full grid gap-1 p-2 bg-black rounded-lg border-2 border-gray-700 ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+      className={`aspect-[22/10] w-full max-w-full grid gap-1 p-2 bg-black rounded-lg border-2 border-gray-700 ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
       style={{ gridTemplateColumns: `repeat(${COLS}, 1fr)` }}
       onContextMenu={(e) => e.preventDefault()} // Disable right click menu
     >

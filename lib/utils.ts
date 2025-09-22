@@ -60,6 +60,8 @@ export const getTextWidth = (text: string): number => {
 export const renderText = (grid: Grid, text: string, color: RGBColor, startX: number, startY: number): Grid => {
   const newGrid = grid.map(row => [...row]);
   let currentX = startX;
+  const fontHeight = 5; // The font is 5 pixels high
+  const yOffset = Math.floor((ROWS - fontHeight) / 2);
 
   for (const char of text.toUpperCase()) {
     const charData = FONT[char];
@@ -68,7 +70,7 @@ export const renderText = (grid: Grid, text: string, color: RGBColor, startX: nu
         for (let x = 0; x < charData[y].length; x++) {
           if (charData[y][x] === 1) {
             const gridX = currentX + x;
-            const gridY = startY + y;
+            const gridY = startY + y + yOffset;
             if (gridX >= 0 && gridX < COLS && gridY >= 0 && gridY < ROWS) {
               newGrid[gridY][gridX] = color;
             }

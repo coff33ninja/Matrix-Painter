@@ -1,5 +1,5 @@
 
-export const ROWS = 9;
+export const ROWS = 10;
 export const COLS = 22;
 export const NUM_LEDS = ROWS * COLS;
 
