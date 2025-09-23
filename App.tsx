@@ -121,6 +121,27 @@ const App: React.FC = () => {
         sendFrame(newGrid);
     }, [animationFrames, currentFrameIndex, sendFrame, updateCurrentFrame]);
 
+    const handleSpray = useCallback((x: number, y: number, color: RGBColor) => {
+        const sprayRadius = 2;
+        const sprayDensity = 0.5;
+
+        updateCurrentFrame(currentGrid => {
+            const newGrid = currentGrid.map(row => [...row]);
+            for (let i = -sprayRadius; i <= sprayRadius; i++) {
+                for (let j = -sprayRadius; j <= sprayRadius; j++) {
+                    if (Math.random() < sprayDensity) {
+                        const newX = x + i;
+                        const newY = y + j;
+                        if (newX >= 0 && newX < COLS && newY >= 0 && newY < ROWS) {
+                            newGrid[newY][newX] = color;
+                        }
+                    }
+                }
+            }
+            return newGrid;
+        });
+    }, [updateCurrentFrame]);
+
     // Fixed: Simplified conditional logic
     const handleCellInteraction = useCallback((x: number, y: number) => {
         const shouldStopAnimation = isAnimationRunning && 
@@ -138,11 +159,14 @@ const App: React.FC = () => {
             case 'Fill':
                 handleFloodFill(x, y, color);
                 break;
+            case 'Spray':
+                handleSpray(x, y, color);
+                break;
             case 'Erase':
                 handleSetPixel(x, y, { r: 0, g: 0, b: 0 });
                 break;
         }
-    }, [isAnimationRunning, tool, color, handleSetPixel, handleFloodFill, animationId]);
+    }, [isAnimationRunning, tool, color, handleSetPixel, handleFloodFill, handleSpray, animationId]);
     
     const handleBrightnessChange = useCallback((value: number) => {
        setBrightnessValue(value);

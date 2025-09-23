@@ -6,7 +6,7 @@ export interface RGBColor {
 
 export type Grid = RGBColor[][];
 
-export type Tool = 'Pencil' | 'Fill' | 'Text' | 'Erase';
+export type Tool = 'Pencil' | 'Fill' | 'Text' | 'Erase' | 'Spray';
 
 export enum Animation {
     None = 'none',

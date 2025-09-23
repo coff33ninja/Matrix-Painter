@@ -63,10 +63,7 @@ To get this project up and running on your local machine:
 ### 🚀 High Impact, Easy Implementation
 
 #### Enhanced Drawing Tools
-- [ ] **Line Tool** - Draw straight lines between two points
-- [ ] **Rectangle Tool** - Hollow and filled rectangles  
-- [ ] **Circle Tool** - Perfect circles with radius selection
-- [ ] **Spray Tool** - Random pixel scatter effect
+- [x] **Spray Tool** - Random pixel scatter effect
 - [ ] **Copy/Paste** - Select areas and duplicate them
 
 #### Color Management
@@ -178,7 +175,7 @@ To get this project up and running on your local machine:
 ### 📊 Development Phases
 
 #### Phase 1 (Quick Wins) 🏃‍♂️
-- [ ] Line/Rectangle/Circle Tools
+- [ ] Circle Tool
 - [ ] Color Palette Presets
 - [ ] Frame Onion Skinning
 - [ ] Pattern Library
