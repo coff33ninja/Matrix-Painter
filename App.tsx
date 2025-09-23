@@ -225,7 +225,7 @@ const App: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-start p-4 font-sans">
-            <div className="w-full max-w-7xl bg-gray-800 rounded-2xl shadow-2xl p-4 md:p-6 space-y-6">
+            <div className="w-full bg-gray-800 rounded-2xl shadow-2xl p-4 md:p-6 space-y-6">
                 <header className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
                     <h1 className="text-3xl font-bold text-cyan-400 tracking-wider">
                         Live Matrix Designer
@@ -235,64 +235,75 @@ const App: React.FC = () => {
                     </button>
                 </header>
 
-                <main className="flex flex-col lg:flex-row gap-6 relative">
-                    <div className="flex flex-col lg:flex-row flex-grow gap-6">
-                    <div className="w-full lg:w-72 space-y-6 flex-shrink-0">
-                        <SerialPanel
-                            onConnect={connect}
-                            onDisconnect={disconnect}
-                            isConnected={isConnected}
-                        />
-                        <Toolbar
-                            selectedColor={color}
-                            onColorChange={setColor}
-                            selectedTool={tool}
-                            onToolChange={setTool}
-                            onBrightnessChange={handleBrightnessChange}
-                            onClear={handleClearGrid}
-                            animationId={animationId}
-                            onAnimationChange={setAnimationId}
-                            animationSpeed={animationSpeed}
-                            onAnimationSpeedChange={setAnimationSpeed}
-                            animationDirection={animationDirection}
-                            onAnimationDirectionChange={setAnimationDirection}
-                            isAnimationRunning={isAnimationRunning}
-                            customAnimationFps={customAnimationFps}
-                            onCustomAnimationFpsChange={setCustomAnimationFps}
-                            disabled={!isConnected}
-                        />
+                <main className="flex gap-6 relative">
+                    {/* Left Column: Tools */}
+                    <div className="lg:w-64 space-y-6 flex-shrink-0">
+                        <div className="p-4 bg-gray-700/50 rounded-lg">
+                            <SerialPanel
+                                onConnect={connect}
+                                onDisconnect={disconnect}
+                                isConnected={isConnected}
+                            />
+                        </div>
+                        <div className="p-4 bg-gray-700/50 rounded-lg">
+                            <Toolbar
+                                selectedColor={color}
+                                onColorChange={setColor}
+                                selectedTool={tool}
+                                onToolChange={setTool}
+                                onBrightnessChange={handleBrightnessChange}
+                                onClear={handleClearGrid}
+                                animationId={animationId}
+                                onAnimationChange={setAnimationId}
+                                animationSpeed={animationSpeed}
+                                onAnimationSpeedChange={setAnimationSpeed}
+                                animationDirection={animationDirection}
+                                onAnimationDirectionChange={setAnimationDirection}
+                                isAnimationRunning={isAnimationRunning}
+                                customAnimationFps={customAnimationFps}
+                                onCustomAnimationFpsChange={setCustomAnimationFps}
+                                disabled={!isConnected}
+                            />
+                        </div>
                         {tool === 'Text' && (
                             <div className="bg-gray-700/50 p-4 rounded-lg">
                                 <TextPanel onTextSubmit={handleTextSubmit} disabled={!isConnected} />
                             </div>
                         )}
                     </div>
+
+                    {/* Middle Column: Matrix */}
                     <div 
-                        className="flex-grow flex flex-col items-center justify-center gap-4"
+                        className="flex-grow flex flex-col gap-6"
                         onMouseDown={() => setIsMouseDown(true)}
                         onMouseUp={() => setIsMouseDown(false)}
                         onMouseLeave={() => setIsMouseDown(false)}
                     >
-                        <MatrixGrid
-                            grid={grid}
-                            onCellClick={handleCellInteraction}
-                            isMouseDown={isMouseDown}
-                            disabled={!isConnected}
-                        />
-                        <FramesPanel
-                            frames={animationFrames}
-                            currentIndex={currentFrameIndex}
-                            onSelectFrame={handleSelectFrame}
-                            onAddFrame={handleAddFrame}
-                            onDuplicateFrame={handleDuplicateFrame}
-                            onDeleteFrame={handleDeleteFrame}
-                            disabled={!isConnected}
-                        />
+                        <div className="p-4 bg-gray-700/50 rounded-lg">
+                            <MatrixGrid
+                                grid={grid}
+                                onCellClick={handleCellInteraction}
+                                isMouseDown={isMouseDown}
+                                disabled={!isConnected}
+                            />
+                        </div>
+                        <div className="p-4 bg-gray-700/50 rounded-lg">
+                            <FramesPanel
+                                frames={animationFrames}
+                                currentIndex={currentFrameIndex}
+                                onSelectFrame={handleSelectFrame}
+                                onAddFrame={handleAddFrame}
+                                onDuplicateFrame={handleDuplicateFrame}
+                                onDeleteFrame={handleDeleteFrame}
+                                disabled={!isConnected}
+                            />
+                        </div>
                     </div>
-                </div>
-                <Sidebar>
-                    <Optional onDisplayTime={(text) => handleTextSubmit(text, false)} isClockActive={isClockActive} setIsClockActive={setIsClockActive} />
-                </Sidebar>
+
+                    {/* Right Column: Optional */}
+                    <div className="lg:w-64 space-y-6 flex-shrink-0">
+                        <Optional onDisplayTime={(text) => handleTextSubmit(text, false)} isClockActive={isClockActive} setIsClockActive={setIsClockActive} />
+                    </div>
                 </main>
                 {showCalculator && (
                     <div ref={calculatorRef} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gray-800 p-4 rounded-lg shadow-lg z-50 max-w-full sm:max-w-3xl lg:max-w-5xl max-h-screen overflow-y-auto">
